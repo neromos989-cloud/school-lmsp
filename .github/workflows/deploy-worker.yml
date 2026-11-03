@@ -1,0 +1,34 @@
+name: Deploy Worker
+
+on:
+  push:
+    branches: [ main, master ]
+    paths: [ "worker/**", ".github/workflows/deploy-worker.yml" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Deploy ke Cloudflare
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+          secrets: |
+            ANTHROPIC_API_KEY
+            TEACHER_CODE
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TEACHER_CODE: ${{ secrets.TEACHER_CODE }}
+
+      - name: Tampilkan alamat Worker
+        run: echo "Alamat Worker (isi ke variabel WORKER_URL):${{ steps.deploy.outputs.deployment-url }}" >> "$GITHUB_STEP_SUMMARY"
