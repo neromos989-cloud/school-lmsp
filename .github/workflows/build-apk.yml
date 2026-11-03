@@ -1,0 +1,49 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+    paths-ignore: [ "worker/**", ".github/workflows/deploy-worker.yml" ]
+  workflow_dispatch:   # bisa dijalankan manual lewat tab Actions
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Isi alamat Worker ke skrip guru
+        if: ${{ vars.WORKER_URL != '' }}
+        env:
+          WORKER_URL: ${{ vars.WORKER_URL }}
+        run: sed -i "s|https://GANTI-DENGAN-ALAMAT-WORKER.workers.dev|${WORKER_URL}|" app/src/main/assets/school-lms-ai.js
+
+      - name: Periksa alamat Worker
+        run: |
+          if grep -q "GANTI-DENGAN-ALAMAT-WORKER" app/src/main/assets/school-lms-ai.js; then
+            echo "::warning::API_URL belum diisi. Buat variabel WORKER_URL di Settings > Secrets and variables > Actions > Variables."
+          fi
+
+      - name: Pasang JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Pasang Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.9
+
+      - name: Build APK debug
+        run: gradle assembleDebug --no-daemon
+
+      - name: Unggah APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SchoolLMS-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
