@@ -1,0 +1,9 @@
+name = "school-lms-ai"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+workers_dev = true
+
+[vars]
+# Alamat situs sekolah (harus sama persis dengan alamat di aplikasi, tanpa garis miring di akhir).
+ALLOWED_ORIGIN = "https://man19jkt.assessment.web.id"
+# MODEL = "claude-sonnet-5-5"   # opsional; bawaan sudah claude-sonnet-5-5

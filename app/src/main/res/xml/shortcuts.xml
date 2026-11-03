@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="change_school"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_change"
+        android:shortcutLongLabel="@string/shortcut_change">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="id.web.assessment.man19jkt"
+            android:targetClass="id.web.assessment.man19jkt.SchoolCodeActivity">
+            <extra android:name="change" android:value="true" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="teacher_mode"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_teacher"
+        android:shortcutLongLabel="@string/shortcut_teacher">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="id.web.assessment.man19jkt"
+            android:targetClass="id.web.assessment.man19jkt.SchoolCodeActivity">
+            <extra android:name="teacher" android:value="true" />
+        </intent>
+    </shortcut>
+</shortcuts>
